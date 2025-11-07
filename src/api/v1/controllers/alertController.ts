@@ -1,7 +1,7 @@
 // Import Statements
 import { Request, Response, NextFunction } from "express";
 import * as alertService from "../services/alertService";
-import { successResponse, errorResponse } from "../models/responseModel";
+import { successResponse, errorResponse } from "../models/responsemodel";
 import { Alert } from "../models/alertmodel";
 
 /**
