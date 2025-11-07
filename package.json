@@ -1,0 +1,34 @@
+{
+  "name": "final_project",
+  "version": "1.0.0",
+  "description": "The weather forecast API is back-end application that provides the weather information \r of different cities to users. In this application, user can view forecasts of all cities, \r a specific one and check severe weather alerts.I choose this theme as I found this theme \r extremely useful and it would be a great example how the back-end works in real world \r appplications.It will provide me opportunity to experience all compoments together such \r as Authenication,Authorization, Validation, Documentation and testing.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harmankaur358/Final_project-backend-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harmankaur358/Final_project-backend-/issues"
+  },
+  "homepage": "https://github.com/harmankaur358/Final_project-backend-#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.0",
+    "@types/supertest": "^6.0.3",
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
