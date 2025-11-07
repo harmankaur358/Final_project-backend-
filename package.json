@@ -4,7 +4,9 @@
   "description": "The weather forecast API is back-end application that provides the weather information \r of different cities to users. In this application, user can view forecasts of all cities, \r a specific one and check severe weather alerts.I choose this theme as I found this theme \r extremely useful and it would be a great example how the back-end works in real world \r appplications.It will provide me opportunity to experience all compoments together such \r as Authenication,Authorization, Validation, Documentation and testing.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "start": "ts-node src/server.ts",
+    "generate-docs": "ts-node scripts/generate-openapi.ts && npx @redocly/cli build-docs openapi.json --output docs/index.html"
   },
   "repository": {
     "type": "git",
