@@ -5,7 +5,7 @@ import * as locationController from "../src/api/v1/controllers/locationControlle
 // Mock service layer
 jest.mock("../src/api/v1/services/locationService");
 
-describe("Location Controller (Simple CRUD Tests)", () => {
+describe("Location Controller", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let next = jest.fn();

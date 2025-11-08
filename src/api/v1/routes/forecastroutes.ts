@@ -19,4 +19,4 @@ router.get("/location/:locationId", getForecastsByLocation);
 router.put("/:id", validateRequest(schema.updateForecastSchema,"body"),updateForecast);
 router.delete("/:id", deleteForecast);
 
-export default router;
+export default router;{}
