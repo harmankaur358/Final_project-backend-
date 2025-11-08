@@ -13,7 +13,7 @@ const router = Router();
 
 router.post("/", validateRequest(schema.createLocationSchema),createLocation);
 router.get("/", getLocations);
-router.get("/:id", getLocationById);
+router.get("/:id",getLocationById);
 router.put("/:id", validateRequest(schema.updateLocationSchema, "body"),updateLocation);
 router.delete("/:id", deleteLocation);
 
