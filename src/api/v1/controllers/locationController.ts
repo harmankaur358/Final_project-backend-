@@ -75,17 +75,27 @@ export const createLocation = async (
         .json(errorResponse("Missing required fields: name, country, latitude, longitude"));
     }
 
+    const latNum = Number(latitude);
+    const longNum = Number(longitude);
+
+    if (isNaN(latNum) || isNaN(longNum)) {
+      return res
+        .status(400)
+        .json(errorResponse("Latitude and longitude must be valid numbers"));
+    }
+
     const newLocation: Location = await locationService.createLocation({
       name,
       country,
-      latitude,
-      longitude,
+      latitude: latNum,
+      longitude: longNum,
     });
 
     return res
       .status(201)
       .json(successResponse(newLocation, "Location created successfully"));
   } catch (error: unknown) {
+    console.error("Error in createLocation:", error);
     next(error);
   }
 };
@@ -108,7 +118,27 @@ export const updateLocation = async (
       return res.status(400).json(errorResponse("Location ID is required"));
     }
 
-    const updatedLocation: Location | null = await locationService.updateLocation(id, req.body);
+    const { latitude, longitude, ...rest } = req.body;
+
+    let updateData: Partial<Location> = { ...rest };
+
+    if (latitude !== undefined) {
+      const latNum = Number(latitude);
+      if (isNaN(latNum)) {
+        return res.status(400).json(errorResponse("Latitude must be a valid number"));
+      }
+      updateData.latitude = latNum;
+    }
+
+    if (longitude !== undefined) {
+      const longNum = Number(longitude);
+      if (isNaN(longNum)) {
+        return res.status(400).json(errorResponse("Longitude must be a valid number"));
+      }
+      updateData.longitude = longNum;
+    }
+
+    const updatedLocation: Location | null = await locationService.updateLocation(id, updateData);
 
     if (!updatedLocation) {
       return res.status(404).json(errorResponse("Location not found"));
@@ -118,6 +148,7 @@ export const updateLocation = async (
       .status(200)
       .json(successResponse(updatedLocation, "Location updated successfully"));
   } catch (error: unknown) {
+    console.error("Error in updateLocation:", error);
     next(error);
   }
 };

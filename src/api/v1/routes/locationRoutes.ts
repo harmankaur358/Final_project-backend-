@@ -5,7 +5,7 @@ import {
   getLocationById,
   updateLocation,
   deleteLocation
-} from "../controllers/locationsController";
+} from "../controllers/locationController"
 import * as schema from "../validation/location"
 import { validateRequest } from "../middleware/validattion";
 

@@ -10,7 +10,6 @@ import morgan from "morgan";
 import alertRoutes from "../src/api/v1/routes/alertRoutes"
 import forecastRoutes from "../src/api/v1/routes/forecastroutes"
 import locationRoutes from "../src/api/v1/routes/locationRoutes"
-
 import setupSwagger from "../config/swagger";
 
 //Express app created 

@@ -6,7 +6,7 @@ import {
   getForecastsByLocation,
   updateForecast,
   deleteForecast
-} from "../controllers/forecastsController";
+} from "../controllers/forecastController";
 import * as schema from "../validation/forecast"
 import { validateRequest } from "../middleware/validattion";
 

@@ -6,7 +6,7 @@ import {
   getAlertsByLocation,
   updateAlert,
   deleteAlert
-} from "../controllers/alertsController";
+} from "../controllers/alertController";
 import * as schema from "../validation/alert"
 import { validateRequest } from "../middleware/validattion";
 
