@@ -12,11 +12,16 @@ const FORECAST_COLLECTION = "forecasts";
 
 /**
  * Creates a new forecast.
+ * Supports custom ID if provided, otherwise Firestore generates one.
  * @param {Forecast} forecastData - Forecast details.
  * @returns {Promise<Forecast>} - The created forecast with ID.
  */
 export const createForecast = async (forecastData: Forecast): Promise<Forecast> => {
-  const id = await createDocument<Forecast>(FORECAST_COLLECTION, forecastData);
+  const id = await createDocument<Forecast>(
+    FORECAST_COLLECTION,
+    forecastData,
+    forecastData.id // <-- pass custom ID if defined
+  );
   return { ...forecastData, id };
 };
 

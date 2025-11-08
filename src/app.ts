@@ -33,8 +33,7 @@ app.use("/api/v1/forecasts", forecastRoutes)
 app.use("/api/v1/locations", locationRoutes)
 
 //alerts endpoint
-app.use("api/v1/alerts", alertRoutes)
-
+app.use("/api/v1/alerts", alertRoutes)
 
 //Setup swagger
 setupSwagger(app)

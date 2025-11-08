@@ -12,11 +12,16 @@ const LOCATION_COLLECTION = "locations";
 
 /**
  * Creates a new location.
+ * Supports custom ID if provided, otherwise Firestore generates one.
  * @param {Location} locationData - The location data to create.
  * @returns {Promise<Location>} - The created location with ID.
  */
 export const createLocation = async (locationData: Location): Promise<Location> => {
-  const id = await createDocument<Location>(LOCATION_COLLECTION, locationData);
+  const id = await createDocument<Location>(
+    LOCATION_COLLECTION,
+    locationData,
+    locationData.id 
+  );
   return { ...locationData, id };
 };
 

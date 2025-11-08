@@ -16,7 +16,7 @@ const ALERTS_COLLECTION = "alerts";
  * @returns {Promise<Alert>} - The created alert with its generated ID.
  */
 export const createAlert = async (alertData: Alert): Promise<Alert> => {
-  const id = await createDocument<Alert>(ALERTS_COLLECTION, alertData);
+  const id = await createDocument<Alert>(ALERTS_COLLECTION, alertData, alertData.id);
   return { ...alertData, id };
 };
 

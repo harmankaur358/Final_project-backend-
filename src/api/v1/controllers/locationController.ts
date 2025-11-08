@@ -7,18 +7,11 @@ import { Location } from "../models/locationmodel";
 /**
  * Get all locations
  * @route GET /locations
- * @returns {Promise<Response>}
  */
-export const getLocations = async (
-  _req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | void> => {
+export const getLocations = async (_req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
     const locations: Location[] = await locationService.getAllLocations();
-    return res
-      .status(200)
-      .json(successResponse(locations, "Locations retrieved successfully"));
+    return res.status(200).json(successResponse(locations, "Locations retrieved successfully"));
   } catch (error: unknown) {
     next(error);
   }
@@ -27,73 +20,49 @@ export const getLocations = async (
 /**
  * Get a single location by ID
  * @route GET /locations/:id
- * @param req.params.id - The location ID
- * @returns {Promise<Response>}
  */
-export const getLocationById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | void> => {
+export const getLocationById = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
     const id: string = req.params.id;
-    if (!id) {
-      return res.status(400).json(errorResponse("Location ID is required"));
-    }
+    if (!id) return res.status(400).json(errorResponse("Location ID is required"));
 
     const location: Location | null = await locationService.getLocationById(id);
+    if (!location) return res.status(404).json(errorResponse("Location not found"));
 
-    if (!location) {
-      return res.status(404).json(errorResponse("Location not found"));
-    }
-
-    return res
-      .status(200)
-      .json(successResponse(location, "Location retrieved successfully"));
+    return res.status(200).json(successResponse(location, "Location retrieved successfully"));
   } catch (error: unknown) {
     next(error);
   }
 };
 
 /**
- * Create a new location
+ * Create a new location (supports auto-generated or custom ID)
  * @route POST /locations
- * @param req.body - Location data (name, country, latitude, longitude)
- * @returns {Promise<Response>}
  */
-export const createLocation = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | void> => {
+export const createLocation = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
-    const { name, country, latitude, longitude } = req.body;
+    const { id, name, country, latitude, longitude } = req.body;
 
     if (!name || !country || latitude === undefined || longitude === undefined) {
-      return res
-        .status(400)
-        .json(errorResponse("Missing required fields: name, country, latitude, longitude"));
+      return res.status(400).json(errorResponse("Missing required fields: name, country, latitude, longitude"));
     }
 
     const latNum = Number(latitude);
     const longNum = Number(longitude);
 
     if (isNaN(latNum) || isNaN(longNum)) {
-      return res
-        .status(400)
-        .json(errorResponse("Latitude and longitude must be valid numbers"));
+      return res.status(400).json(errorResponse("Latitude and longitude must be valid numbers"));
     }
 
     const newLocation: Location = await locationService.createLocation({
+      id, // optional custom ID
       name,
       country,
       latitude: latNum,
       longitude: longNum,
     });
 
-    return res
-      .status(201)
-      .json(successResponse(newLocation, "Location created successfully"));
+    return res.status(201).json(successResponse(newLocation, "Location created successfully"));
   } catch (error: unknown) {
     console.error("Error in createLocation:", error);
     next(error);
@@ -103,50 +72,31 @@ export const createLocation = async (
 /**
  * Update an existing location
  * @route PUT /locations/:id
- * @param req.params.id - The location ID
- * @param req.body - Updated location data
- * @returns {Promise<Response>}
  */
-export const updateLocation = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | void> => {
+export const updateLocation = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
     const id: string = req.params.id;
-    if (!id) {
-      return res.status(400).json(errorResponse("Location ID is required"));
-    }
+    if (!id) return res.status(400).json(errorResponse("Location ID is required"));
 
     const { latitude, longitude, ...rest } = req.body;
-
     let updateData: Partial<Location> = { ...rest };
 
     if (latitude !== undefined) {
       const latNum = Number(latitude);
-      if (isNaN(latNum)) {
-        return res.status(400).json(errorResponse("Latitude must be a valid number"));
-      }
+      if (isNaN(latNum)) return res.status(400).json(errorResponse("Latitude must be a valid number"));
       updateData.latitude = latNum;
     }
 
     if (longitude !== undefined) {
       const longNum = Number(longitude);
-      if (isNaN(longNum)) {
-        return res.status(400).json(errorResponse("Longitude must be a valid number"));
-      }
+      if (isNaN(longNum)) return res.status(400).json(errorResponse("Longitude must be a valid number"));
       updateData.longitude = longNum;
     }
 
     const updatedLocation: Location | null = await locationService.updateLocation(id, updateData);
+    if (!updatedLocation) return res.status(404).json(errorResponse("Location not found"));
 
-    if (!updatedLocation) {
-      return res.status(404).json(errorResponse("Location not found"));
-    }
-
-    return res
-      .status(200)
-      .json(successResponse(updatedLocation, "Location updated successfully"));
+    return res.status(200).json(successResponse(updatedLocation, "Location updated successfully"));
   } catch (error: unknown) {
     console.error("Error in updateLocation:", error);
     next(error);
@@ -156,29 +106,16 @@ export const updateLocation = async (
 /**
  * Delete a location
  * @route DELETE /locations/:id
- * @param req.params.id - The location ID to delete
- * @returns {Promise<Response>}
  */
-export const deleteLocation = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | void> => {
+export const deleteLocation = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
     const id: string = req.params.id;
-    if (!id) {
-      return res.status(400).json(errorResponse("Location ID is required"));
-    }
+    if (!id) return res.status(400).json(errorResponse("Location ID is required"));
 
     const deleted: boolean = await locationService.deleteLocation(id);
+    if (!deleted) return res.status(404).json(errorResponse("Location not found"));
 
-    if (!deleted) {
-      return res.status(404).json(errorResponse("Location not found"));
-    }
-
-    return res
-      .status(200)
-      .json(successResponse(true, "Location deleted successfully"));
+    return res.status(200).json(successResponse(true, "Location deleted successfully"));
   } catch (error: unknown) {
     next(error);
   }
