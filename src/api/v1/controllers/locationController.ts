@@ -1,4 +1,3 @@
-// Import Statements
 import { Request, Response, NextFunction } from "express";
 import * as locationService from "../services/locationService";
 import { successResponse, errorResponse } from "../models/responsemodel";
@@ -36,33 +35,40 @@ export const getLocationById = async (req: Request, res: Response, next: NextFun
 };
 
 /**
- * Create a new location (supports auto-generated or custom ID)
+ * Create a new location
  * @route POST /locations
  */
 export const createLocation = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
     const { id, name, country, latitude, longitude } = req.body;
 
+    // Validate required fields
     if (!name || !country || latitude === undefined || longitude === undefined) {
-      return res.status(400).json(errorResponse("Missing required fields: name, country, latitude, longitude"));
+      return res.status(400)
+        .json(errorResponse("Missing required fields: name, country, latitude, longitude"));
     }
 
     const latNum = Number(latitude);
     const longNum = Number(longitude);
 
     if (isNaN(latNum) || isNaN(longNum)) {
-      return res.status(400).json(errorResponse("Latitude and longitude must be valid numbers"));
+      return res.status(400)
+        .json(errorResponse("Latitude and longitude must be valid numbers"));
     }
 
-    const newLocation: Location = await locationService.createLocation({
-      id, // optional custom ID
-      name,
-      country,
+    // Construct a full Location object for the service
+    const locationData: Location = {
+      name: name!,
+      country: country!,
       latitude: latNum,
       longitude: longNum,
-    });
+      ...(id?.trim() && { id }),
+    } as Location;
 
-    return res.status(201).json(successResponse(newLocation, "Location created successfully"));
+    const newLocation: Location = await locationService.createLocation(locationData);
+
+    return res.status(201)
+      .json(successResponse(newLocation, "Location created successfully"));
   } catch (error: unknown) {
     console.error("Error in createLocation:", error);
     next(error);

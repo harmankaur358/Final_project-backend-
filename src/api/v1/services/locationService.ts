@@ -9,7 +9,6 @@ import { Location } from "../models/locationmodel";
 
 /** Firestore collection name for locations */
 const LOCATION_COLLECTION = "locations";
-
 /**
  * Creates a new location.
  * Supports custom ID if provided, otherwise Firestore generates one.
@@ -17,12 +16,18 @@ const LOCATION_COLLECTION = "locations";
  * @returns {Promise<Location>} - The created location with ID.
  */
 export const createLocation = async (locationData: Location): Promise<Location> => {
-  const id = await createDocument<Location>(
+  // Only pass ID if it exists and is non-empty
+  const id = locationData.id?.trim() ? locationData.id : undefined;
+
+  // Call repository to create document
+  const generatedId = await createDocument<Location>(
     LOCATION_COLLECTION,
     locationData,
-    locationData.id 
+    id
   );
-  return { ...locationData, id };
+
+  // Return location with actual ID (custom or auto-generated)
+  return { ...locationData, id: generatedId };
 };
 
 /**
