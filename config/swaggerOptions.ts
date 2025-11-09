@@ -4,10 +4,10 @@ const swaggerOptions: swaggerJsdoc.Options = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "Weather forecast API Documentation",
+            title: "Task Management API Documentation",
             version: "1.0.0",
             description:
-                "This is the API documentation for the Weather forecast API.",
+                "This is the API documentation for the Task Management application.",
         },
         servers: [
             {

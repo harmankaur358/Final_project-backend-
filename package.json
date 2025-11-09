@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/harmankaur358/Final_project-backend-#readme",
   "devDependencies": {
+    "@redocly/cli": "^2.11.0",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.5",
     "@types/jest": "^30.0.0",
