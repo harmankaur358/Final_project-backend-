@@ -1,3 +1,4 @@
+//Import statements
 import {
   createDocument,
   getDocuments,
@@ -19,14 +20,13 @@ export const createLocation = async (locationData: Location): Promise<Location> 
   // Only pass ID if it exists and is non-empty
   const id = locationData.id?.trim() ? locationData.id : undefined;
 
-  // Call repository to create document
+  // Call repository 
   const generatedId = await createDocument<Location>(
     LOCATION_COLLECTION,
     locationData,
     id
   );
 
-  // Return location with actual ID (custom or auto-generated)
   return { ...locationData, id: generatedId };
 };
 

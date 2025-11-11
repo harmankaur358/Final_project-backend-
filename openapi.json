@@ -1,0 +1,920 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Weather forecast API Documentation",
+    "version": "1.0.0",
+    "description": "This is the API documentation for the weather forecast application."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Local server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Alert": {
+        "type": "object",
+        "required": [
+          "locationId",
+          "type",
+          "description",
+          "severity",
+          "startTime",
+          "endTime"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the alert",
+            "example": "alert_001"
+          },
+          "locationId": {
+            "type": "string",
+            "description": "ID of the location associated with the alert",
+            "example": "loc_123"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "Storm",
+              "Rain",
+              "Snow",
+              "Heat",
+              "Cold"
+            ],
+            "description": "Type of weather alert",
+            "example": "Storm"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 500,
+            "description": "Detailed description of the weather alert",
+            "example": "Severe thunderstorm expected with high winds and heavy rainfall."
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High",
+              "Critical"
+            ],
+            "description": "Level of alert severity",
+            "example": "High"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 start time of the alert",
+            "example": "2025-11-09T10:00:00Z"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 end time of the alert",
+            "example": "2025-11-09T18:00:00Z"
+          }
+        }
+      },
+      "CreateAlertInput": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Alert"
+          }
+        ],
+        "required": [
+          "locationId",
+          "type",
+          "description",
+          "severity",
+          "startTime",
+          "endTime"
+        ],
+        "description": "Schema for creating a new alert"
+      },
+      "UpdateAlertInput": {
+        "type": "object",
+        "description": "Schema for updating an existing alert",
+        "properties": {
+          "locationId": {
+            "type": "string",
+            "description": "ID of the location associated with the alert",
+            "example": "loc_123"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "Storm",
+              "Rain",
+              "Snow",
+              "Heat",
+              "Cold"
+            ],
+            "example": "Rain"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 500,
+            "example": "Moderate rainfall expected throughout the evening."
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High",
+              "Critical"
+            ],
+            "example": "Medium"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-11-09T12:00:00Z"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-11-09T20:00:00Z"
+          }
+        }
+      },
+      "AlertIdParam": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the alert",
+            "example": "alert_001"
+          }
+        }
+      },
+      "Forecast": {
+        "type": "object",
+        "required": [
+          "locationId",
+          "temperature",
+          "humidity",
+          "windSpeed"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the forecast",
+            "example": "forecast_001"
+          },
+          "locationId": {
+            "type": "string",
+            "description": "ID of the location this forecast belongs to",
+            "example": "loc_123"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Predicted temperature in Celsius",
+            "example": 24.5
+          },
+          "humidity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Humidity percentage (0–100)",
+            "example": 72
+          },
+          "windSpeed": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Wind speed in km/h",
+            "example": 15
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 date and time of the forecast",
+            "example": "2025-11-09T10:00:00Z"
+          }
+        }
+      },
+      "CreateForecastInput": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Forecast"
+          }
+        ],
+        "required": [
+          "locationId",
+          "temperature",
+          "humidity",
+          "windSpeed"
+        ],
+        "description": "Schema for creating a new weather forecast"
+      },
+      "UpdateForecastInput": {
+        "type": "object",
+        "description": "Schema for updating an existing weather forecast",
+        "properties": {
+          "locationId": {
+            "type": "string",
+            "description": "ID of the location this forecast belongs to",
+            "example": "loc_123"
+          },
+          "temperature": {
+            "type": "number",
+            "example": 26.3
+          },
+          "humidity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "example": 65
+          },
+          "windSpeed": {
+            "type": "number",
+            "minimum": 0,
+            "example": 18
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2025-11-10T06:00:00Z"
+          }
+        }
+      },
+      "ForecastIdParam": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the forecast",
+            "example": "forecast_001"
+          }
+        }
+      },
+      "Location": {
+        "type": "object",
+        "required": [
+          "name",
+          "country",
+          "latitude",
+          "longitude"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the location",
+            "example": "loc_001"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "description": "Name of the location (e.g., city or region)",
+            "example": "Winnipeg"
+          },
+          "country": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "description": "Country where the location is situated",
+            "example": "Canada"
+          },
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Geographic latitude of the location",
+            "example": 49.8951
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Geographic longitude of the location",
+            "example": -97.1384
+          }
+        }
+      },
+      "CreateLocationInput": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Location"
+          }
+        ],
+        "required": [
+          "name",
+          "country",
+          "latitude",
+          "longitude"
+        ],
+        "description": "Schema for creating a new location"
+      },
+      "UpdateLocationInput": {
+        "type": "object",
+        "description": "Schema for updating an existing location",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "example": "Toronto"
+          },
+          "country": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "example": "Canada"
+          },
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "example": 43.65107
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "example": -79.347015
+          }
+        }
+      },
+      "LocationIdParam": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the location",
+            "example": "loc_001"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/alerts": {
+      "post": {
+        "summary": "Create a new weather alert",
+        "tags": [
+          "Alerts"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAlertInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Alert created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Alert"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve all weather alerts",
+        "tags": [
+          "Alerts"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all alerts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Alert"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/alerts/{id}": {
+      "get": {
+        "summary": "Get a specific alert by its ID",
+        "tags": [
+          "Alerts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/AlertIdParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alert details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Alert"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Alert not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing alert by its ID",
+        "tags": [
+          "Alerts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/AlertIdParam"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAlertInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Alert updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Alert"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid update data"
+          },
+          "404": {
+            "description": "Alert not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an alert by its ID",
+        "tags": [
+          "Alerts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/AlertIdParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alert deleted successfully"
+          },
+          "404": {
+            "description": "Alert not found"
+          }
+        }
+      }
+    },
+    "/alerts/location/{locationId}": {
+      "get": {
+        "summary": "Get all alerts for a specific location",
+        "tags": [
+          "Alerts"
+        ],
+        "parameters": [
+          {
+            "name": "locationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "ID of the location to fetch alerts for",
+              "example": "loc_123"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alerts for the given location",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Alert"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No alerts found for this location"
+          }
+        }
+      }
+    },
+    "/forecasts": {
+      "post": {
+        "summary": "Create a new weather forecast",
+        "tags": [
+          "Forecasts"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateForecastInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Forecast created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forecast"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve all weather forecasts",
+        "tags": [
+          "Forecasts"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all forecasts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Forecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forecasts/{id}": {
+      "get": {
+        "summary": "Get a specific forecast by its ID",
+        "tags": [
+          "Forecasts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ForecastIdParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Forecast retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forecast"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Forecast not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing forecast by its ID",
+        "tags": [
+          "Forecasts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ForecastIdParam"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateForecastInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Forecast updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forecast"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid update data"
+          },
+          "404": {
+            "description": "Forecast not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a forecast by its ID",
+        "tags": [
+          "Forecasts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ForecastIdParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Forecast deleted successfully"
+          },
+          "404": {
+            "description": "Forecast not found"
+          }
+        }
+      }
+    },
+    "/forecasts/location/{locationId}": {
+      "get": {
+        "summary": "Get all forecasts for a specific location",
+        "tags": [
+          "Forecasts"
+        ],
+        "parameters": [
+          {
+            "name": "locationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "ID of the location to fetch forecasts for",
+              "example": "loc_123"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Forecasts for the given location",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Forecast"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No forecasts found for this location"
+          }
+        }
+      }
+    },
+    "/locations": {
+      "post": {
+        "summary": "Create a new location",
+        "tags": [
+          "Locations"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLocationInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Location created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Location"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve all locations",
+        "tags": [
+          "Locations"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all locations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Location"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locations/{id}": {
+      "get": {
+        "summary": "Get a specific location by ID",
+        "tags": [
+          "Locations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/LocationIdParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Location retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Location"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Location not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a location by ID",
+        "tags": [
+          "Locations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/LocationIdParam"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLocationInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Location updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Location"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid update data"
+          },
+          "404": {
+            "description": "Location not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a location by ID",
+        "tags": [
+          "Locations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/LocationIdParam"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Location deleted successfully"
+          },
+          "404": {
+            "description": "Location not found"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

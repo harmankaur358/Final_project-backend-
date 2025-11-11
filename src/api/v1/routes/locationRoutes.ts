@@ -110,8 +110,8 @@ const router = Router();
 
 router.post("/", validateRequest(schema.createLocationSchema), createLocation);
 router.get("/", getLocations);
-router.get("/:id", validateRequest(schema.locationIdSchema, "params"), getLocationById);
+router.get("/:id", getLocationById);
 router.put("/:id", validateRequest(schema.updateLocationSchema, "body"), updateLocation);
-router.delete("/:id", validateRequest(schema.locationIdSchema, "params"), deleteLocation);
+router.delete("/:id", deleteLocation);
 
 export default router;

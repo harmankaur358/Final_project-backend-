@@ -1,3 +1,4 @@
+//Import statements
 import {
   createDocument,
   getDocuments,
@@ -20,7 +21,7 @@ export const createForecast = async (forecastData: Forecast): Promise<Forecast> 
   const id = await createDocument<Forecast>(
     FORECAST_COLLECTION,
     forecastData,
-    forecastData.id // <-- pass custom ID if defined
+    forecastData.id 
   );
   return { ...forecastData, id };
 };

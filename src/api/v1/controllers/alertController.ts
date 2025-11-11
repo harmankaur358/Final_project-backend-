@@ -6,7 +6,6 @@ import { Alert } from "../models/alertmodel";
 
 /**
  * Get all alerts
- * @route GET /alerts
  */
 export const getAlerts = async (_req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -18,8 +17,7 @@ export const getAlerts = async (_req: Request, res: Response, next: NextFunction
 };
 
 /**
- * Get a specific alert by ID
- * @route GET /alerts/:id
+ Get a specific alert by ID
  */
 export const getAlertById = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -37,7 +35,6 @@ export const getAlertById = async (req: Request, res: Response, next: NextFuncti
 
 /**
  * Get alerts by location ID
- * @route GET /alerts/location/:locationId
  */
 export const getAlertsByLocation = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -54,8 +51,7 @@ export const getAlertsByLocation = async (req: Request, res: Response, next: Nex
 };
 
 /**
- * Create a new alert (supports auto-generated or custom ID)
- * @route POST /alerts
+ * Create a new alert 
  */
 export const createAlert = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -67,7 +63,7 @@ export const createAlert = async (req: Request, res: Response, next: NextFunctio
     }
 
     const newAlert: Alert = await alertService.createAlert({
-      id, // optional: custom ID
+      id, 
       locationId,
       type,
       description,
@@ -84,7 +80,6 @@ export const createAlert = async (req: Request, res: Response, next: NextFunctio
 
 /**
  * Update an existing alert
- * @route PUT /alerts/:id
  */
 export const updateAlert = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -102,7 +97,6 @@ export const updateAlert = async (req: Request, res: Response, next: NextFunctio
 
 /**
  * Delete an alert
- * @route DELETE /alerts/:id
  */
 export const deleteAlert = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {

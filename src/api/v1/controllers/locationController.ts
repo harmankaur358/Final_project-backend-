@@ -5,7 +5,6 @@ import { Location } from "../models/locationmodel";
 
 /**
  * Get all locations
- * @route GET /locations
  */
 export const getLocations = async (_req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -18,7 +17,6 @@ export const getLocations = async (_req: Request, res: Response, next: NextFunct
 
 /**
  * Get a single location by ID
- * @route GET /locations/:id
  */
 export const getLocationById = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -36,7 +34,6 @@ export const getLocationById = async (req: Request, res: Response, next: NextFun
 
 /**
  * Create a new location
- * @route POST /locations
  */
 export const createLocation = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -56,7 +53,6 @@ export const createLocation = async (req: Request, res: Response, next: NextFunc
         .json(errorResponse("Latitude and longitude must be valid numbers"));
     }
 
-    // Construct a full Location object for the service
     const locationData: Location = {
       name: name!,
       country: country!,
@@ -77,7 +73,6 @@ export const createLocation = async (req: Request, res: Response, next: NextFunc
 
 /**
  * Update an existing location
- * @route PUT /locations/:id
  */
 export const updateLocation = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -111,7 +106,6 @@ export const updateLocation = async (req: Request, res: Response, next: NextFunc
 
 /**
  * Delete a location
- * @route DELETE /locations/:id
  */
 export const deleteLocation = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {

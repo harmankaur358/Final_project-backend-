@@ -6,7 +6,6 @@ import { Forecast } from "../models/forecastmodel";
 
 /**
  * Get all forecasts
- * @route GET /forecasts
  */
 export const getForecasts = async (_req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -19,7 +18,6 @@ export const getForecasts = async (_req: Request, res: Response, next: NextFunct
 
 /**
  * Get forecast by ID
- * @route GET /forecasts/:id
  */
 export const getForecastById = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -37,7 +35,6 @@ export const getForecastById = async (req: Request, res: Response, next: NextFun
 
 /**
  * Get forecasts by location
- * @route GET /forecasts/location/:locationId
  */
 export const getForecastsByLocation = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -54,8 +51,7 @@ export const getForecastsByLocation = async (req: Request, res: Response, next: 
 };
 
 /**
- * Create a new forecast (supports auto-generated or custom ID)
- * @route POST /forecasts
+ * Create a new forecast
  */
 export const createForecast = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -67,7 +63,7 @@ export const createForecast = async (req: Request, res: Response, next: NextFunc
     }
 
     const newForecast: Forecast = await forecastService.createForecast({
-      id, // optional custom ID
+      id, 
       locationId,
       temperature,
       humidity,
@@ -83,7 +79,6 @@ export const createForecast = async (req: Request, res: Response, next: NextFunc
 
 /**
  * Update an existing forecast
- * @route PUT /forecasts/:id
  */
 export const updateForecast = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
@@ -101,7 +96,6 @@ export const updateForecast = async (req: Request, res: Response, next: NextFunc
 
 /**
  * Delete a forecast
- * @route DELETE /forecasts/:id
  */
 export const deleteForecast = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {

@@ -1,3 +1,4 @@
+//Import statements
 import {
   createAlert,
   getAlerts,
@@ -10,7 +11,7 @@ import {
 import * as alertService from "../src/api/v1/services/alertService";
 import { Request, Response, NextFunction } from "express";
 
-// Mock the service layer
+// Mocking the service layer
 jest.mock("../src/api/v1/services/alertService");
 
 const mockRes = () => {
@@ -20,7 +21,7 @@ const mockRes = () => {
   return res as Response;
 };
 
-describe("Alert Controller (simple tests)", () => {
+describe("Alert Controller", () => {
   let res: Response;
   let req: Partial<Request>;
   let next: NextFunction;

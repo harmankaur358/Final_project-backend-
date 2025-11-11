@@ -1,3 +1,4 @@
+//Import statments
 import {
   createDocument,
   getDocuments,
@@ -12,8 +13,8 @@ const ALERTS_COLLECTION = "alerts";
 
 /**
  * Creates a new alert document in Firestore.
- * @param {Alert} alertData - The alert data to be created.
- * @returns {Promise<Alert>} - The created alert with its generated ID.
+ * @param {Alert} alertData - alert data to be created.
+ * @returns {Promise<Alert>} - created alert with its generated ID.
  */
 export const createAlert = async (alertData: Alert): Promise<Alert> => {
   const id = await createDocument<Alert>(ALERTS_COLLECTION, alertData, alertData.id);

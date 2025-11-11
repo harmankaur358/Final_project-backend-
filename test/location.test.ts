@@ -1,8 +1,9 @@
+//Import statements
 import { Request, Response } from "express";
 import * as locationService from "../src/api/v1/services/locationService";
 import * as locationController from "../src/api/v1/controllers/locationController";
 
-// Mock service layer
+// Mocking service layer
 jest.mock("../src/api/v1/services/locationService");
 
 describe("Location Controller", () => {
@@ -18,7 +19,7 @@ describe("Location Controller", () => {
     jest.clearAllMocks();
   });
 
-  // 🧩 GET /locations
+  //  GET /locations
   test("getLocations - should return all locations", async () => {
     (locationService.getAllLocations as jest.Mock).mockResolvedValue([{ id: "1", name: "London" }]);
 
@@ -28,7 +29,7 @@ describe("Location Controller", () => {
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  // 🧩 GET /locations/:id
+  //  GET /locations/:id
   test("getLocationById - should return 404 if not found", async () => {
     (locationService.getLocationById as jest.Mock).mockResolvedValue(null);
     req = { params: { id: "999" } };
@@ -38,7 +39,7 @@ describe("Location Controller", () => {
     expect(res.status).toHaveBeenCalledWith(404);
   });
 
-  // 🧩 POST /locations
+  //  POST /locations
   test("createLocation - should create a new location", async () => {
     const mockLoc = { id: "1", name: "Paris", country: "France", latitude: 48.8, longitude: 2.3 };
     (locationService.createLocation as jest.Mock).mockResolvedValue(mockLoc);
@@ -58,7 +59,7 @@ describe("Location Controller", () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
 
-  // 🧩 PUT /locations/:id
+  // PUT /locations/:id
   test("updateLocation - should call updateLocation and return 200", async () => {
     const updated = { id: "1", name: "Berlin" };
     (locationService.updateLocation as jest.Mock).mockResolvedValue(updated);
@@ -70,7 +71,7 @@ describe("Location Controller", () => {
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  // 🧩 DELETE /locations/:id
+  //  DELETE /locations/:id
   test("deleteLocation - should delete and return 200", async () => {
     (locationService.deleteLocation as jest.Mock).mockResolvedValue(true);
     req = { params: { id: "1" } };

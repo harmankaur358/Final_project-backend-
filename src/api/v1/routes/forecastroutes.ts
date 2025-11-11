@@ -136,9 +136,9 @@ const router = Router();
 
 router.post("/", validateRequest(schema.createForecastSchema), createForecast);
 router.get("/", getForecasts);
-router.get("/:id", validateRequest(schema.forecastIdSchema, "params"), getForecastById);
+router.get("/:id", getForecastById);
 router.get("/location/:locationId", getForecastsByLocation);
 router.put("/:id", validateRequest(schema.updateForecastSchema, "body"), updateForecast);
-router.delete("/:id", validateRequest(schema.forecastIdSchema, "params"), deleteForecast);
+router.delete("/:id", deleteForecast);
 
 export default router;
