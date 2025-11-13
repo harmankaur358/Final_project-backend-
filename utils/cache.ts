@@ -6,11 +6,12 @@ type CacheEntry = {
 };
 
 const cache = new Map<string, CacheEntry>();
-const DEFAULT_TTL = 60 * 60 * 1000; // 1 hour
+const DEFAULT_TTL = 60 * 60 * 1000; // 5 seconds 
 
 export const setCache = (key: string, data: any, ttl: number = DEFAULT_TTL): void => {
   const expiry = Date.now() + ttl;
   cache.set(key, { data, expiry });
+  console.log(`Caching key "${key}" for ${ttl / 1000} seconds`);
 };
 
 export const getCache = (key: string): any | null => {
