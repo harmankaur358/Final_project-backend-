@@ -1,12 +1,12 @@
-// utils/cache.ts
-
+// Cache Entry
 type CacheEntry = {
   data: any;
   expiry: number;
 };
 
+//Expiry set to one hour
 const cache = new Map<string, CacheEntry>();
-const DEFAULT_TTL = 60 * 60 * 1000; // 5 seconds 
+const DEFAULT_TTL = 60 * 60 * 1000;  
 
 export const setCache = (key: string, data: any, ttl: number = DEFAULT_TTL): void => {
   const expiry = Date.now() + ttl;
@@ -27,6 +27,7 @@ export const getCache = (key: string): any | null => {
   return entry.data;
 };
 
+//Clear expire caches
 export const clearCache = (key?: string): void => {
   if (key) cache.delete(key);
   else cache.clear();
