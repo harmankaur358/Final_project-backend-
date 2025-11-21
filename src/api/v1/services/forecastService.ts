@@ -55,7 +55,7 @@ export const getAllForecasts = async (): Promise<Forecast[]> => {
  * Retrieves a forecast by ID.
  */
 export const getForecastById = async (id: string): Promise<Forecast | null> => {
-  const cacheKey = `cache_forecast_${id}`; // unique key per forecast
+  const cacheKey = `cache_forecast_${id}`; 
   const cached = getCache(cacheKey);
   if (cached) {
     console.log(` Returning forecast ${id} from cache`);
