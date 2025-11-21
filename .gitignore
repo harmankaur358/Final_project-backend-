@@ -1,4 +1,6 @@
 node_modules
 final_project_new.json
 .env
-
+# Logs
+logs/
+*.log
