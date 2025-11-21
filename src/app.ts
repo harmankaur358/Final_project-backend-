@@ -10,7 +10,7 @@ import morgan from "morgan";
 import alertRoutes from "../src/api/v1/routes/alertRoutes"
 import forecastRoutes from "../src/api/v1/routes/forecastroutes"
 import locationRoutes from "../src/api/v1/routes/locationRoutes"
-import setupSwagger from "../config/swagger";
+import setupSwagger from "../src/config/swagger";
 import { accessLogger, errorLogger, consoleLogger } from "./api/v1/middleware/logger";
 import errorHandler from "./api/v1/middleware/errorHanlder"
 //import authMiddleware from "./api/v1/middleware/authenticate";
