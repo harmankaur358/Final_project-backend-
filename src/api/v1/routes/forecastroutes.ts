@@ -131,14 +131,15 @@ import {
 } from "../controllers/forecastController";
 import * as schema from "../validations/forecast";
 import { validateRequest } from "../middleware/validattion";
+import isAuthorized from "../middleware/authorize";
 
 const router = Router();
 
-router.post("/", validateRequest(schema.createForecastSchema), createForecast);
-router.get("/", getForecasts);
-router.get("/:id", getForecastById);
-router.get("/location/:locationId", getForecastsByLocation);
-router.put("/:id", validateRequest(schema.updateForecastSchema, "body"), updateForecast);
-router.delete("/:id", deleteForecast);
+router.post("/", isAuthorized({hasRole: ["admin", "manager"]}),validateRequest(schema.createForecastSchema), createForecast);
+router.get("/",isAuthorized({hasRole: ["admin", "manager", "user"]}), getForecasts);
+router.get("/:id", isAuthorized({hasRole: ["admin", "manager", "user"]}),getForecastById);
+router.get("/location/:locationId", isAuthorized({hasRole: ["admin", "manager", "user"]}),getForecastsByLocation);
+router.put("/:id",isAuthorized({hasRole: ["admin", "manager"]}), validateRequest(schema.updateForecastSchema, "body"), updateForecast);
+router.delete("/:id",isAuthorized({hasRole: ["admin", "manager"]}), deleteForecast);
 
 export default router;

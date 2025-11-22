@@ -105,13 +105,14 @@ import {
 } from "../controllers/locationController";
 import * as schema from "../validations/location";
 import { validateRequest } from "../middleware/validattion";
+import isAuthorized from "../middleware/authorize";
 
 const router = Router();
 
-router.post("/", validateRequest(schema.createLocationSchema), createLocation);
-router.get("/", getLocations);
-router.get("/:id", getLocationById);
-router.put("/:id", validateRequest(schema.updateLocationSchema, "body"), updateLocation);
-router.delete("/:id", deleteLocation);
+router.post("/", isAuthorized({hasRole: ["admin", "manager"]}),validateRequest(schema.createLocationSchema), createLocation);
+router.get("/", isAuthorized({hasRole: ["admin", "manager", "user"]}),getLocations);
+router.get("/:id", isAuthorized({hasRole: ["admin", "manager", "user"]}),getLocationById);
+router.put("/:id", isAuthorized({hasRole: ["admin", "manager"]}),validateRequest(schema.updateLocationSchema, "body"), updateLocation);
+router.delete("/:id",isAuthorized({hasRole: ["admin", "manager"]}), deleteLocation);
 
 export default router;

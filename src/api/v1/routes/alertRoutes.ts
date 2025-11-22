@@ -131,14 +131,15 @@ import {
 } from "../controllers/alertController";
 import * as schema from "../validations/alert";
 import { validateRequest } from "../middleware/validattion";
+import isAuthorized from "../middleware/authorize";
 
 const router = Router();
 
-router.post("/", validateRequest(schema.createAlertSchema), createAlert);
-router.get("/", getAlerts);
-router.get("/:id", getAlertById);
-router.get("/location/:locationId", getAlertsByLocation);
-router.put("/:id", validateRequest(schema.updateAlertSchema, "body"), updateAlert);
-router.delete("/:id", deleteAlert);
+router.post("/",isAuthorized({hasRole: ["admin", "manager"]}), validateRequest(schema.createAlertSchema), createAlert);
+router.get("/", isAuthorized({hasRole: ["admin", "manager", "user"]}), getAlerts);
+router.get("/:id",isAuthorized({hasRole: ["admin", "manager", "user"]}), getAlertById);
+router.get("/location/:locationId",isAuthorized({hasRole: ["admin", "manager", "user"]}), getAlertsByLocation);
+router.put("/:id", isAuthorized({hasRole: ["admin", "manager"]}),validateRequest(schema.updateAlertSchema, "body"), updateAlert);
+router.delete("/:id", isAuthorized({hasRole: ["admin", "manager"]}),deleteAlert);
 
 export default router;
