@@ -7,14 +7,23 @@ import { Alert } from "../models/alertmodel";
 /**
  * Get all alerts
  */
-export const getAlerts = async (_req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+export const getAlerts = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
-    const alerts: Alert[] = await alertService.getAllAlerts();
+
+    const filters: any = {};
+
+    if (req.query.type) filters.type = req.query.type;
+    if (req.query.severity) filters.severity = req.query.severity;
+    if (req.query.locationId) filters.locationId = req.query.locationId;
+
+    const alerts: Alert[] = await alertService.getAllAlerts(filters);
+
     return res.status(200).json(successResponse(alerts, "Alerts retrieved successfully"));
   } catch (error: unknown) {
     next(error);
   }
 };
+
 
 /**
  Get a specific alert by ID
