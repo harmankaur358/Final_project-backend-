@@ -7,6 +7,7 @@ import {
   deleteDocument,
 } from "../repositories/firebaserepository";
 import { Alert } from "../models/alertmodel";
+import { db } from "../../../config/firebaseConfig";
 
 /** Firestore collection name for alerts */
 const ALERTS_COLLECTION = "alerts";
@@ -22,13 +23,26 @@ export const createAlert = async (alertData: Alert): Promise<Alert> => {
 };
 
 /**
- * Retrieves all alerts from Firestore.
- * @returns {Promise<Alert[]>} - An array of alerts.
+ * Retrieves all alerts from Firestore with optional filtering.
+ * @param filters Key-value pairs to filter Firestore query
+ * @returns {Promise<Alert[]>}
  */
-export const getAllAlerts = async (): Promise<Alert[]> => {
-  const snapshot = await getDocuments(ALERTS_COLLECTION);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Alert));
+export const getAllAlerts = async (filters: any = {}): Promise<Alert[]> => {
+  let query: FirebaseFirestore.Query = db.collection(ALERTS_COLLECTION);
+
+  // Applying filtering 
+  for (const [field, value] of Object.entries(filters)) {
+    query = query.where(field, "==", value);
+  }
+
+  const snapshot = await query.get();
+
+  return snapshot.docs.map((doc: any) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Alert[];
 };
+
 
 /**
  * Retrieves an alert by its ID.

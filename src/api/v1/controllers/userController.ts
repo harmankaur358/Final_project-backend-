@@ -8,7 +8,7 @@ interface CustomClaims {
   [key: string]: any;
 }
 
-// Get user details - user, officer, manager can user details
+// Get user details - user, admin, manager can user details
 export const getUserDetails = async (req: Request, res: Response): Promise<void> => {
   const { uid } = req.params 
   // Checking the user details by uid in request
@@ -21,7 +21,7 @@ export const getUserDetails = async (req: Request, res: Response): Promise<void>
       email: userRecord.email,
       roles: (userRecord.customClaims as CustomClaims) || {},
     });
-    //Sending error of 500 if try block fails to get user details
+    //Sending error of 500 
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
